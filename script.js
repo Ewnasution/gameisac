@@ -9,7 +9,7 @@
 /* ---------- 1. KONFIGURASI ---------- */
 const JUMLAH_SOAL = 10;
 const JUMLAH_LEVEL = 10;
-const WAKTU_DEFAULT_MS = 10000; // waktu standar per soal (10 detik)
+const WAKTU_DEFAULT_MS = 25000; // waktu standar per soal (10 detik)
 const POIN_BENAR = 5;
 const POIN_SALAH = -2;
 const POIN_WAKTU_HABIS = -2;
