@@ -9,16 +9,15 @@
 /* ---------- 1. KONFIGURASI ---------- */
 const JUMLAH_SOAL = 10;
 const JUMLAH_LEVEL = 10;
-const WAKTU_MS = 10000;
+const WAKTU_DEFAULT_MS = 10000; // waktu standar per soal (10 detik)
 const POIN_BENAR = 5;
 const POIN_SALAH = -2;
 const POIN_WAKTU_HABIS = -2;
-
+ 
 const MAPEL = [
-  { id: 'matematika',   nama: 'Matematika',    ikon: '∑', desk: 'Taklukkan angka, bangun datar, dan logika.' },
-  { id: 'fisika',       nama: 'Fisika',        ikon: '⚛', desk: 'Jelajahi alam, tubuh, dan alam semesta.' },
-  { id: 'kimia',        nama: 'Kimia',          ikon: '⚛', desk: 'Jelajahi alam, tubuh, dan alam semesta.' },
-  { id: 'biologi',      nama: 'Biologi',       ikon: '⚛', desk: 'Jelajahi alam, tubuh, dan alam semesta.' },
+  // waktuMs (opsional) = waktu per soal khusus mata pelajaran; bila tidak diisi, dipakai WAKTU_DEFAULT_MS.
+  { id: 'matematika',   nama: 'Matematika',    ikon: '∑', desk: 'Taklukkan angka, bangun datar, dan logika.', waktuMs: 30000 },
+  { id: 'ipa',          nama: 'IPA',           ikon: '⚛', desk: 'Jelajahi alam, tubuh, dan alam semesta.' },
   { id: 'sejarahIslam', nama: 'Sejarah Islam', ikon: '☪', desk: 'Telusuri kisah Nabi, sahabat, dan peradaban.' },
   { id: 'fiqh',         nama: 'Fiqh',          ikon: '⚖', desk: 'Pelajari tata cara ibadah dan hukumnya.' },
   { id: 'tauhid',       nama: 'Tauhid',        ikon: '✦', desk: 'Kenali keesaan Allah dan pokok keimanan.' },
@@ -1773,22 +1772,23 @@ function showFeedback(type, text) {
 function stopTimer() {
   if (state.timerId !== null) { clearInterval(state.timerId); state.timerId = null; }
 }
-
+ 
 function startTimer() {
   stopTimer(); // pastikan tidak pernah ada dua interval sekaligus
-  state.deadline = Date.now() + WAKTU_MS;
-  renderTimer(WAKTU_MS);
+  state.durasiMs = (state.subject && state.subject.waktuMs) || WAKTU_DEFAULT_MS;
+  state.deadline = Date.now() + state.durasiMs;
+  renderTimer(state.durasiMs);
   state.timerId = setInterval(() => {
     const left = state.deadline - Date.now(); // berbasis waktu nyata, bebas drift
     if (left <= 0) { renderTimer(0); handleTimeout(); }
     else renderTimer(left);
   }, 100);
 }
-
+ 
 function renderTimer(ms) {
   const sec = Math.ceil(ms / 1000);
   $('timerNum').textContent = String(sec);
-  $('timerFill').style.width = `${(ms / WAKTU_MS) * 100}%`;
+  $('timerFill').style.width = `${(ms / state.durasiMs) * 100}%`;
   $('timerBox').className = 'timer' + (sec <= 2 ? ' danger' : sec <= 5 ? ' warn' : '');
 }
 
@@ -1801,12 +1801,12 @@ function lockQuestion() {
   optionButtons().forEach(b => { b.disabled = true; });
   return true;
 }
-
+ 
 function markOption(btn, cls, symbol) {
   btn.classList.add(cls);
   btn.querySelector('.mark').textContent = symbol;
 }
-
+ 
 function applyScore(delta) {
   state.score += delta; // boleh negatif
   $('gScore').textContent = String(state.score);
@@ -1815,19 +1815,19 @@ function applyScore(delta) {
   pop.className = 'score-pop ' + (delta > 0 ? 'plus' : 'minus');
   restartAnimation(pop, 'show');
 }
-
+ 
 function finishQuestion(q) {
   $('explain').textContent = q.explanation ? `Penjelasan: ${q.explanation}` : '';
   setProgress(state.index + 1);
   $('nextBtn').disabled = false; // NEXT aktif; tidak ada perpindahan otomatis
 }
-
+ 
 function handleAnswer(pos) {
   if (!lockQuestion()) return;
   const q = state.questions[state.index];
   const btns = optionButtons();
   const correctPos = q.options.findIndex(o => o.id === q.correctId);
-
+ 
   if (q.options[pos].id === q.correctId) {
     state.correct++;
     markOption(btns[pos], 'correct', '✓');
@@ -1842,7 +1842,7 @@ function handleAnswer(pos) {
   }
   finishQuestion(q);
 }
-
+ 
 function handleTimeout() {
   if (!lockQuestion()) return;
   const q = state.questions[state.index];
@@ -1854,7 +1854,7 @@ function handleTimeout() {
   showFeedback('time', '⏱ WAKTU HABIS! -2 POIN');
   finishQuestion(q);
 }
-
+ 
 function nextQuestion() {
   if (!state.locked || state.finished || $('nextBtn').disabled) return;
   if (state.index >= JUMLAH_SOAL - 1) { showResult(); return; }
@@ -1862,24 +1862,24 @@ function nextQuestion() {
   showQuestion();
   optionButtons()[0].focus({ preventScroll: true });
 }
-
+ 
 /* ---------- 9. HASIL ---------- */
 function formatDurasi(detik) {
   return detik >= 60 ? `${Math.floor(detik / 60)} mnt ${detik % 60} dtk` : `${detik} dtk`;
 }
-
+ 
 function pesanHasil(p) {
   if (p >= 80) return 'Luar biasa! Kamu siap naik level.';
   if (p >= 50) return 'Bagus! Sedikit lagi menuju sempurna.';
   return 'Jangan menyerah. Coba lagi dan kamu pasti naik level!';
 }
-
+ 
 function showResult() {
   stopTimer();
   state.finished = true;
   const persen = (state.correct / JUMLAH_SOAL) * 100;
   const detik = Math.round((Date.now() - state.startedAt) / 1000);
-
+ 
   $('gCounter').textContent = 'LEVEL SELESAI';
   $('gameArea').hidden = true;
   $('resultArea').hidden = false;
@@ -1897,7 +1897,7 @@ function showResult() {
   restartAnimation($('rScore'), 'pop-in');
   $('resultTitle').focus({ preventScroll: true });
 }
-
+ 
 function leaveGame() {
   cancelNav();
   stopTimer();
