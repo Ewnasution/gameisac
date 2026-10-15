@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Persiapan ISAC 2026 — Learn. Play. Level Up.</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <main class="app">
+
+    <!-- PAGE 1: PEMILIHAN MATA PELAJARAN -->
+    <section id="page1" class="page active" aria-labelledby="title1">
+      <header class="hero">
+        <h1 id="title1" class="logo">Persiapan ISAC 2026</h1>
+        <p class="tagline">Learn. Play. Level Up.</p>
+        <p class="sub">Pilih mata pelajaran dan mulai petualangan belajarmu!</p>
+      </header>
+      <div id="subjectGrid" class="grid subjects"></div>
+    </section>
+
+    <!-- PAGE 2: PEMILIHAN LEVEL -->
+    <section id="page2" class="page" aria-labelledby="title2">
+      <button type="button" id="backToSubjects" class="btn ghost">← Kembali</button>
+      <header class="hero">
+        <h2 id="title2" class="logo small">PILIH LEVEL</h2>
+        <p id="subjectInfo" class="sub"></p>
+      </header>
+      <div id="levelGrid" class="grid levels"></div>
+      <p id="levelError" class="notice-error" role="alert" hidden></p>
+    </section>
+
+    <!-- PAGE 3: AREA GAME + RINGKASAN HASIL -->
+    <section id="page3" class="page" aria-label="Area permainan">
+      <h2 class="sr-only">Area Game</h2>
+      <header class="game-head panel">
+        <button type="button" id="backToLevels" class="btn ghost">← Level</button>
+        <div class="meta">
+          <span id="gSubject"></span>
+          <span id="gLevel"></span>
+          <strong id="gCounter">PERTANYAAN 1 / 10</strong>
+        </div>
+        <div class="score">SKOR <b id="gScore">0</b><span id="scorePop" class="score-pop" aria-hidden="true"></span></div>
+      </header>
+
+      <div id="gameArea">
+        <div id="progressBar" class="bar" role="progressbar" aria-label="Progres soal" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><i id="progressFill"></i></div>
+
+        <div id="qPanel" class="panel question">
+          <span id="qLabel" class="tag"></span>
+          <p id="qText"></p>
+        </div>
+
+        <div id="timerBox" class="timer" aria-label="Sisa waktu">
+          <span id="timerNum" class="timer-num">10</span>
+          <div class="bar"><i id="timerFill"></i></div>
+        </div>
+
+        <div id="options" class="options" role="group" aria-label="Pilihan jawaban">
+          <button type="button" class="opt" data-i="0"><b class="letter">A</b><span class="txt"></span><span class="mark" aria-hidden="true"></span></button>
+          <button type="button" class="opt" data-i="1"><b class="letter">B</b><span class="txt"></span><span class="mark" aria-hidden="true"></span></button>
+          <button type="button" class="opt" data-i="2"><b class="letter">C</b><span class="txt"></span><span class="mark" aria-hidden="true"></span></button>
+          <button type="button" class="opt" data-i="3"><b class="letter">D</b><span class="txt"></span><span class="mark" aria-hidden="true"></span></button>
+        </div>
+
+        <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+        <p id="explain" class="explain"></p>
+
+        <div class="actions end">
+          <button type="button" id="nextBtn" class="btn primary" disabled>NEXT</button>
+        </div>
+      </div>
+
+      <div id="resultArea" class="panel result" hidden>
+        <h2 id="resultTitle" tabindex="-1">LEVEL SELESAI!</h2>
+        <p id="rMsg" class="sub"></p>
+        <p class="big">SKOR AKHIR <b id="rScore">0</b></p>
+        <dl class="stats">
+          <div><dt>Mata Pelajaran</dt><dd id="rSubject"></dd></div>
+          <div><dt>Level</dt><dd id="rLevel"></dd></div>
+          <div><dt>✓ Benar</dt><dd id="rCorrect"></dd></div>
+          <div><dt>✗ Salah</dt><dd id="rWrong"></dd></div>
+          <div><dt>⏱ Waktu habis</dt><dd id="rTimeout"></dd></div>
+          <div><dt>Durasi</dt><dd id="rTime"></dd></div>
+        </dl>
+        <p>Jawaban benar: <b id="rPercent"></b></p>
+        <div class="bar"><i id="rBar"></i></div>
+        <div class="actions">
+          <button type="button" id="againBtn" class="btn primary">MAIN LAGI</button>
+          <button type="button" id="toLevelsBtn" class="btn ghost">PILIH LEVEL</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+<footer> 
+    <div>&copy; 2026 | Dibuat oleh Elkausar Wijaya Nasution</div> 
+</footer>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
