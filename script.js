@@ -17,7 +17,9 @@ const POIN_WAKTU_HABIS = -2;
 const MAPEL = [
   // waktuMs (opsional) = waktu per soal khusus mata pelajaran; bila tidak diisi, dipakai WAKTU_DEFAULT_MS.
   { id: 'matematika',   nama: 'Matematika',    ikon: '∑', desk: 'Taklukkan angka, bangun datar, dan logika.', waktuMs: 30000 },
-  { id: 'ipa',          nama: 'IPA',           ikon: '⚛', desk: 'Jelajahi alam, tubuh, dan alam semesta.' },
+  { id: 'fisika',       nama: 'Fisika',           ikon: '⚛', desk: 'Jelajahi alam, tubuh, dan alam semesta.' },
+  { id: 'kimia',          nama: 'Kimia',           ikon: '⚛', desk: 'Jelajahi alam, tubuh, dan alam semesta.' },
+  { id: 'biologi',          nama: 'Biologi',           ikon: '⚛', desk: 'Jelajahi alam, tubuh, dan alam semesta.' },
   { id: 'sejarahIslam', nama: 'Sejarah Islam', ikon: '☪', desk: 'Telusuri kisah Nabi, sahabat, dan peradaban.' },
   { id: 'fiqh',         nama: 'Fiqh',          ikon: '⚖', desk: 'Pelajari tata cara ibadah dan hukumnya.' },
   { id: 'tauhid',       nama: 'Tauhid',        ikon: '✦', desk: 'Kenali keesaan Allah dan pokok keimanan.' },
